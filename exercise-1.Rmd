@@ -1,7 +1,5 @@
 ---
 title: "Assignment B4 Option A Exercise 1"
-author: "Renessa"
-date: "2023-12-03"
 output: github_document
 ---
 
@@ -25,7 +23,7 @@ library(ggplot2) # includes functions required for data visualization
 
 # 1.0 A Christmas Carol by Charles Dickens
 
-The following code retrieves "A Christmas Carol" by Charles Dickens from the Project Gutenberg database. 
+The following code retrieves _A Christmas Carol_ by Charles Dickens from the **Project Gutenberg** database. 
 
 ```{r}
 xmascarol_crude <- gutenberg_download(19337)

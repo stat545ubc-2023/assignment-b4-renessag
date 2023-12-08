@@ -1,7 +1,5 @@
 ---
 title: "Assignment B4 Option A Exercise 2"
-author: "Renessa"
-date: "2023-12-03"
 output: github_document
 ---
 
@@ -11,29 +9,31 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(stringr) # includes functions required for string manipulation
+library(dplyr) # includes case_when() function vectorize multiple if_else statements
+library(tibble) # includes tibble() function to create tibbles from scratch
 library(testthat) # includes functions required to test and evaluate function behaviors
 ```
 
 # Go Loco Language : Pig Latin Derivative  
 
 ## 1.0 Language Architecture  
-**Go Loco** applies a set of explicit rules to translate words into **Go Loco**. Each word undergoes a _rearrangement_ and _addition_ transformation, but will differ slightly depending on the original word structure. 
+**Go Loco** applies a set of explicit rules to translate words, such that each word undergoes a _rearrangement_ and _addition_ transformation. The transformation however will differ slightly depending on the original word structure. 
 
 ### 1.1 Rearrangement Rules    
-1. Words that begin with a consonant, followed by a vowel: 
+1. **Words that begin with a consonant, followed by a vowel**:
 
- Move the consonant/vowel pair to the end of the word and then repeat the consonant/vowel pair.
+ Move the consonant/vowel pair to the end of the word and then repeat the consonant/vowel pair.  
  Retain the first vowel at the front of the word.  
  
-2. Words that begin with a consonant cluster, followed by a vowel: 
+2. **Words that begin with a consonant cluster, followed by a vowel**:
 
- Move the consonant cluster and following vowel to the end of the word and then repeat this consonant cluster/vowel sound. 
- Keep the first vowel at the front.
+ Move the consonant cluster and following vowel to the end of the word and then repeat this consonant cluster/vowel sound.  
+ Retain the first vowel at the front of the word.
  
-3. Words that begin with a vowel:
+3. **Words that begin with a vowel**:  
 
-  Move the vowel to the end and with the consonant following it. 
-  Repeat this consonant/vowel pair (consonant first) X2.
+ Move the vowel to the end and with the consonant following it.  
+ Repeat this consonant/vowel pair (consonant first) twice.
 
 ### 1.2 Addition Rules:
 1. Add "loco" to the end of every word.
@@ -41,8 +41,8 @@ library(testthat) # includes functions required to test and evaluate function be
 
 ## 2.0 Examples of Go Loco 
 
-### 2.1 Single Word Examples  
-banana -> nanababaloco
+### 2.1 Single Word Examples    
+banana -> nanababaloco  
 apple -> pleapapaloco
 
 ### 2.2 Translating `words` data set in `stringr` package  
@@ -93,6 +93,7 @@ The following code creates a function called `goloco` that takes a string or cha
 #'
 #' @return A character vector with the translated input
 #' @import stringr
+#' @import dplyr
 #' @export
 #'
 #' @examples
