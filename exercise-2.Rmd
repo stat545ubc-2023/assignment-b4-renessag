@@ -1,0 +1,206 @@
+---
+title: "Assignment B4 Option A Exercise 2"
+author: "Renessa"
+date: "2023-12-03"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(stringr) # includes functions required for string manipulation
+library(testthat) # includes functions required to test and evaluate function behaviors
+```
+
+# Go Loco Language : Pig Latin Derivative  
+
+## 1.0 Language Architecture  
+**Go Loco** applies a set of explicit rules to translate words into **Go Loco**. Each word undergoes a _rearrangement_ and _addition_ transformation, but will differ slightly depending on the original word structure. 
+
+### 1.1 Rearrangement Rules    
+1. Words that begin with a consonant, followed by a vowel: 
+
+ Move the consonant/vowel pair to the end of the word and then repeat the consonant/vowel pair.
+ Retain the first vowel at the front of the word.  
+ 
+2. Words that begin with a consonant cluster, followed by a vowel: 
+
+ Move the consonant cluster and following vowel to the end of the word and then repeat this consonant cluster/vowel sound. 
+ Keep the first vowel at the front.
+ 
+3. Words that begin with a vowel:
+
+  Move the vowel to the end and with the consonant following it. 
+  Repeat this consonant/vowel pair (consonant first) X2.
+
+### 1.2 Addition Rules:
+1. Add "loco" to the end of every word.
+
+
+## 2.0 Examples of Go Loco 
+
+### 2.1 Single Word Examples  
+banana -> nanababaloco
+apple -> pleapapaloco
+
+### 2.2 Translating `words` data set in `stringr` package  
+The following list is the original `words` data set found in the `stringr` package:
+
+```{r}
+words
+```
+
+Here is a sample of how the words contained in this data set would be translated into **Go Loco**.
+
+```{r}
+# rules applied to words that begin with a consonant/vowel pair
+words_trans <-
+  tibble("English" = words,
+         "Go Loco" = case_when(str_starts(words, "[^aioeu](?=[aiouey])") ~  
+                      str_c(str_sub(words, start = 2, end = -1), 
+                            str_sub(words, start = 1, end = 2), 
+                            str_sub(words, start = 1, end = 2), 
+                            "loco"),
+# rules applied to words that begin with a consonant cluster/vowel sound
+                    str_starts(words, "[^aioeu](?![aiouey])") ~ 
+                      str_c(str_extract(words, "([aioeuy]).*"), 
+                            str_extract(words, "^[^aioue]+[aiouey]+"),
+                            str_extract(words, "^[^aioue]+[aiouey]+"),
+                            "loco"),
+# rules applied to words that begin with a vowel
+                    str_starts(words, "[aioeu]") ~
+                      str_c(str_extract(words, "(?<=[^aioue]).*"), 
+                            str_extract(words, "(^[aioue]+[^aioue])"),
+                            str_extract(words, "(^[aioue]+[^aioue])"),
+                            str_extract(words, "(^[aioue])"),
+                            "loco")))
+
+words_trans
+```
+
+Note that the word must be at least 2 letters long to be translated into **Go Loco** e.g. "a" does not have a **Go Loco** translation.
+
+## 3.0 Function `goloco`  
+
+The following code creates a function called `goloco` that takes a string or character vector input for `words` and outputs a character vector corresponding to the **Go Loco** translation of the input. 
+
+```{r} 
+#' @title Translate word(s) into Go Loco "Pig Latin" derivative language
+#'
+#' @param words A string or character vector to translate into Go Loco
+#'
+#' @return A character vector with the translated input
+#' @import stringr
+#' @export
+#'
+#' @examples
+#' goloco(banana)
+#' goloco(c("pineapple", "melon", "apple"))
+#' goloco(str_split_1("the quick fox jumped over the lazy moon", " "))
+#' 
+goloco <- function(words) {
+  if(is.numeric(words)) {
+        stop("Sorry! You can't make numbers go loco :(")
+    }
+# rules applied to words that begin with a consonant/vowel pair
+  case_when(str_starts(words, "[^aioeu](?=[aiouey])") ~  
+                      str_c(str_sub(words, start = 2, end = -1), 
+                            str_sub(words, start = 1, end = 2), 
+                            str_sub(words, start = 1, end = 2), 
+                            "loco"),
+# rules applied to words that begin with a consonant cluster/vowel sound
+                    str_starts(words, "[^aioeu](?![aiouey])") ~ 
+                      str_c(str_extract(words, "([aioeuy]).*"), 
+                            str_extract(words, "^[^aioue]+[aiouey]+"),
+                            str_extract(words, "^[^aioue]+[aiouey]+"),
+                            "loco"),
+# rules applied to words that begin with a vowel
+                    str_starts(words, "[aioeu]") ~
+                      str_c(str_extract(words, "(?<=[^aioue]).*"), 
+                            str_extract(words, "(^[aioue]+[^aioue])"),
+                            str_extract(words, "(^[aioue]+[^aioue])"),
+                            str_extract(words, "(^[aioue])"),
+                            "loco"))
+}
+```
+
+## 4.0 Examples of `goloco`
+
+### 4.1 Translating single words using `goloco`
+
+Here is an example of applying `goloco` to translate single words. 
+
+```{r}
+goloco("banana")
+goloco("apple")
+goloco("pineapple")
+```
+
+### 4.2 Translating a sentence using `goloco`
+
+Here is a example of applying `goloco` to translate a sentence.
+
+```{r}
+# requires splitting the sentence into its component words, using the separator " " 
+goloco(str_split_1("we all like to eat apples and bananas", " "))
+```
+
+### 4.3 Translating `words` data set in `stringr` package using `goloco`  
+
+Recall the `words` data set found in the `stringr` package:
+
+```{r}
+head(words, n = 100)
+```
+
+Here is an example of applying `goloco` to translate the character vector `words`.
+
+```{r}
+goloco(stringr::words)
+```
+
+## 5.0 Tests for `goloco` Functionality  
+
+The following section formally tests the `goloco` function given various types of input to test the robustness of its intended use and its response to inappropriate inputs. 
+
+### 5.1 String input, starts with consonant 
+This test evaluates if `goloco` correctly translates a string that begins with a consonant. 
+
+```{r}
+test_that("translating words that starts with consonant", {
+  expect_identical(object = goloco("lollipop"),
+                   expected = "ollipoplololoco")
+})
+```
+
+### 5.2 String input, starts with vowel 
+This test evaluates if `goloco` correctly translates a string that begins with a vowel. 
+
+```{r}
+test_that("translating words that starts with vowel", {
+  expect_identical(object = goloco("alligator"),
+                   expected = "ligatoralalaloco")
+})
+```
+
+### 5.3 Character vector input 
+This test evaluates if `goloco` correctly translates a vector of character strings.
+
+```{r}
+test_that("translating vector of character strings", {
+  expect_identical(object = goloco(c("balloon", "clown", "cake")),
+                   expected = c("alloonbabaloco", "ownclocloloco", "akecacaloco"))
+})
+```
+
+### 5.4 Numeric input
+This test evaluates if `goloco` correctly prevents numeric inputs. 
+
+```{r}
+test_that("error given numeric input", {
+  expect_error(object = goloco(123))
+})
+```
+
