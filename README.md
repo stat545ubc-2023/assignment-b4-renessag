@@ -3,12 +3,12 @@
 ### Description  
 This repository contains the files and code authored by Renessa Gomes as submission for **Assignment B4** in STAT 545B. This submission was completed according to the guidelines and requirements found [**here**](https://stat545.stat.ubc.ca/assignments/assignment-b4/). 
 
-Three options for completion were presented and of these, **Option A** was selected. Exercises 1 and 2 were selected for submission.   
+Three options for completion were presented and of these, **Option A** was selected. **Exercises 1** and **2** were selected for submission.   
 
 The purpose of **Assignment B4 Option A** is to apply concepts presented in class to accomplish various exercises involving strings and functional programming in R. 
 
 ### Sources of Data  
-Exercise 1 of this assignment required analysis of a text. **A Christmas Carol** by Charles Dickens was chosen and retrieved from [**Project Gutenberg**](https://dev.gutenberg.org/ebooks/19337). 
+Exercise 1 of this assignment required analysis of a text. *A Christmas Carol* by Charles Dickens was chosen and retrieved from [**Project Gutenberg**](https://dev.gutenberg.org/ebooks/19337). 
 
 ### Files in the Repository  
 This repository contains the following files:  
@@ -31,9 +31,9 @@ The following packages are required to run the code in `exercise-1.Rmd` and may 
 * `ggplot2` : includes functions required for data visualization
 
 The following packages are required to run the code in `exercise-2.Rmd` and may need to be installed:
-* `dplyr` : includes case_when() function vectorize multiple if_else statements
+* `dplyr` : includes `case_when()` function vectorize multiple `if_else()` statements
 * `stringr` : includes functions required for string manipulation
-* `tibble` : includes tibble() function to create tibbles from scratch
+* `tibble` : includes `tibble()` function to create tibbles from scratch
 * `testthat` : includes functions required to test and evaluate function behaviors
 
 
